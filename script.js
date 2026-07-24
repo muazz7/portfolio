@@ -132,6 +132,19 @@
       { threshold: 0.14, rootMargin: "0px 0px -8% 0px" }
     );
     revealEls.forEach((el) => io.observe(el));
+
+    /* The hero is the entry screen. On phones its info tiles sit just below the
+       fold, so waiting for a scroll leaves a blank gap on first paint. Reveal
+       everything inside the hero on load (each item keeps its own
+       transition-delay, so the staggered entrance is preserved) and stop
+       observing those nodes. */
+    const heroEls = revealEls.filter((el) => el.closest(".hero"));
+    requestAnimationFrame(() => {
+      heroEls.forEach((el) => {
+        el.classList.add("is-visible");
+        io.unobserve(el);
+      });
+    });
   }
 
   /* ---------------------------------------------------------
@@ -139,28 +152,41 @@
   --------------------------------------------------------- */
   const counters = document.querySelectorAll("[data-count]");
   if (counters.length && !prefersReduced && "IntersectionObserver" in window) {
+    const animateCount = (el) => {
+      const target = parseFloat(el.dataset.count) || 0;
+      const suffix = el.dataset.suffix || "";
+      const dur = 1400;
+      const start = performance.now();
+      const step = (now) => {
+        const p = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(eased * target) + suffix;
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
     const countIO = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          const el = entry.target;
-          const target = parseFloat(el.dataset.count) || 0;
-          const suffix = el.dataset.suffix || "";
-          const dur = 1400;
-          const start = performance.now();
-          const step = (now) => {
-            const p = Math.min(1, (now - start) / dur);
-            const eased = 1 - Math.pow(1 - p, 3);
-            el.textContent = Math.round(eased * target) + suffix;
-            if (p < 1) requestAnimationFrame(step);
-          };
-          requestAnimationFrame(step);
-          countIO.unobserve(el);
+          animateCount(entry.target);
+          countIO.unobserve(entry.target);
         });
       },
       { threshold: 0.6 }
     );
-    counters.forEach((el) => countIO.observe(el));
+
+    counters.forEach((el) => {
+      /* Hero counters live in the entry screen (below the fold on phones): run
+         them on load so a revealed tile never shows a stale "0". Everything
+         else still counts up when scrolled into view. */
+      if (el.closest(".hero")) {
+        animateCount(el);
+      } else {
+        countIO.observe(el);
+      }
+    });
   } else {
     counters.forEach((el) => {
       el.textContent = (el.dataset.count || "0") + (el.dataset.suffix || "");
