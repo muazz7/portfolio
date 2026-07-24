@@ -112,7 +112,7 @@
   if (prefersReduced || !("IntersectionObserver" in window)) {
     revealEls.forEach((el) => el.classList.add("is-visible"));
   } else {
-    document.querySelectorAll(".hero__main, .hero__tiles, .index, .stack, .steps, .about").forEach((group) => {
+    document.querySelectorAll(".hero__main, .hero__tiles, .index, .stack, .timeline, .about").forEach((group) => {
       Array.from(group.children).forEach((child, i) => {
         if (child.hasAttribute("data-reveal")) {
           child.style.transitionDelay = Math.min(i * 70, 420) + "ms";

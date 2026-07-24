@@ -414,15 +414,30 @@ a:focus-visible, button:focus-visible {
 .chips span { font-family: var(--f-mono); font-size: 0.78rem; padding: 0.4rem 0.7rem;
   border: 1.5px solid var(--border); border-radius: 999px; color: var(--ink-2); }
 
-/* ---------- Journey ---------- */
-.steps { border-top: 2px solid var(--border); }
-.step { display: grid; grid-template-columns: 190px 1fr; gap: clamp(1rem, 3vw, 2.5rem);
-  padding: clamp(1.5rem, 3vw, 2.3rem) 0; border-bottom: 2px solid var(--border); }
-.step__time { font-family: var(--f-mono); text-transform: uppercase; letter-spacing: 0.06em;
-  font-size: 0.8rem; color: var(--accent-ink); padding-top: 0.35rem; }
-.step__role { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.3rem, 3vw, 1.9rem); letter-spacing: -0.01em; }
-.step__org { color: var(--ink-3); font-family: var(--f-mono); font-size: 0.82rem; margin-top: 0.3rem; }
-.step__desc { color: var(--ink-2); margin-top: 0.8rem; max-width: 62ch; }
+/* ---------- Journey (timeline) ---------- */
+.timeline { position: relative; }
+.tl { position: relative; padding: 0 0 clamp(1.9rem, 4vw, 2.9rem) 2.5rem; }
+.tl:last-child { padding-bottom: 0; }
+/* node marker on the rail */
+.tl::before {
+  content: ""; position: absolute; left: 0; top: 4px; z-index: 1;
+  width: 15px; height: 15px; border-radius: 4px;
+  background: var(--paper); border: 2px solid var(--accent);
+}
+/* connector line to the next node */
+.tl::after {
+  content: ""; position: absolute; left: 6.5px; top: 20px; bottom: -4px;
+  width: 2px; background: var(--border);
+}
+.tl:last-child::after { display: none; }
+.tl--current::before { background: var(--accent); }
+
+.tl__year { display: inline-block; font-family: var(--f-mono); text-transform: uppercase;
+  letter-spacing: 0.08em; font-size: 0.75rem; color: var(--accent-ink); margin-bottom: 0.55rem; }
+.tl--current .tl__year { background: var(--accent); color: var(--on-accent); padding: 0.2rem 0.5rem; border-radius: 3px; }
+.tl__role { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.25rem, 3vw, 1.85rem); letter-spacing: -0.01em; }
+.tl__desc { color: var(--ink-2); margin-top: 0.55rem; max-width: 60ch; }
+.tl__desc strong { color: var(--ink); font-weight: 600; }
 .text-link { color: var(--accent-ink); border-bottom: 2px solid var(--accent); transition: color 0.2s; }
 .text-link:hover { color: var(--accent); }
 
@@ -487,8 +502,6 @@ a:focus-visible, button:focus-visible {
 @media (max-width: 680px) {
   .about { grid-template-columns: 1fr; }
   .stack { grid-template-columns: 1fr; }
-  .step { grid-template-columns: 1fr; gap: 0.5rem; }
-  .step__time { padding-top: 0; }
   .index__row a, .index__row > div {
     grid-template-columns: auto 1fr auto;
     grid-template-areas: "no name go" "tags tags tags"; row-gap: 0.5rem;
