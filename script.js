@@ -168,12 +168,47 @@
   }
 
   /* ---------------------------------------------------------
-     Active nav link based on section in view
+     Stack section — hidden by default, toggled by nav link
   --------------------------------------------------------- */
+  const stackSection = document.getElementById("stack");
+  const stackNavLink = document.querySelector('.bar__link[href="#stack"]');
+
+  const openStack = () => {
+    if (!stackSection) return;
+    stackSection.classList.add("is-open");
+    if (stackNavLink) stackNavLink.classList.add("is-active");
+  };
+
+  const closeStack = () => {
+    if (!stackSection) return;
+    stackSection.classList.remove("is-open");
+    if (stackNavLink) stackNavLink.classList.remove("is-active");
+  };
+
+  if (stackNavLink) {
+    stackNavLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      const isOpen = stackSection.classList.contains("is-open");
+      if (isOpen) {
+        closeStack();
+      } else {
+        openStack();
+        // Scroll to it after the transition starts
+        setTimeout(() => {
+          stackSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 80);
+      }
+    });
+  }
+
+  // Close stack when any other nav link is clicked
+  document.querySelectorAll('.bar__link:not([href="#stack"])').forEach((link) => {
+    link.addEventListener("click", closeStack);
+  });
   const linkMap = new Map();
   document.querySelectorAll(".bar__link").forEach((link) => {
     const id = link.getAttribute("href");
-    if (id && id.startsWith("#")) linkMap.set(id.slice(1), link);
+    if (id && id.startsWith("#") && id !== "#stack") linkMap.set(id.slice(1), link);
   });
 
   const spyTargets = Array.from(linkMap.keys())

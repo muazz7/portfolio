@@ -408,7 +408,13 @@ a:focus-visible, button:focus-visible {
 .index__label { font-family: var(--f-mono); text-transform: uppercase; letter-spacing: 0.12em;
   font-size: 0.76rem; color: var(--accent-ink); margin-bottom: 0.9rem; }
 
-/* ---------- Stack ---------- */
+/* ---------- Stack (collapsed by default, revealed on nav click) ---------- */
+#stack { overflow: hidden; max-height: 0; padding-top: 0; padding-bottom: 0;
+  opacity: 0; pointer-events: none;
+  transition: max-height 0.55s var(--ease), opacity 0.45s var(--ease),
+    padding 0.45s var(--ease); }
+#stack.is-open { max-height: 800px; padding-top: clamp(4.5rem, 10vw, 8rem);
+  padding-bottom: clamp(4.5rem, 10vw, 8rem); opacity: 1; pointer-events: auto; }
 .stack { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.85rem, 1.5vw, 1.15rem); }
 .panel { border: 2px solid var(--border); border-radius: var(--r-lg); padding: clamp(1.4rem, 2.5vw, 2rem);
   background: var(--panel); transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease); }
