@@ -23,12 +23,8 @@
   const themeColorMeta = document.getElementById("themeColorMeta");
   const THEME_COLORS = { dark: "#141210", light: "#f4f0e7" };
 
-  const readStored = () => {
-    try { return localStorage.getItem("theme"); } catch (e) { return null; }
-  };
-  const writeStored = (t) => {
-    try { localStorage.setItem("theme", t); } catch (e) { /* ignore */ }
-  };
+  // Theme is intentionally NOT persisted — every page load starts in light.
+  // The toggle only affects the current view; refresh resets to light.
 
   const applyTheme = (theme) => {
     root.setAttribute("data-theme", theme);
@@ -50,7 +46,6 @@
         window.setTimeout(() => root.classList.remove("theme-transition"), 500);
       }
       applyTheme(next);
-      writeStored(next);
     });
   }
 

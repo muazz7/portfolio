@@ -10,10 +10,10 @@
   <script>
     (function () {
       try {
-        var stored = localStorage.getItem("theme");
-        // Default to light on first visit; only honor an explicit user choice thereafter.
-        var theme = stored === "dark" ? "dark" : "light";
-        document.documentElement.setAttribute("data-theme", theme);
+        // Always start in light on every load (do not persist theme across refreshes).
+        // Also clear any previously-saved value so returning visitors get reset once.
+        localStorage.removeItem("theme");
+        document.documentElement.setAttribute("data-theme", "light");
       } catch (e) {
         document.documentElement.setAttribute("data-theme", "light");
       }
