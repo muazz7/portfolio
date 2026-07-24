@@ -40,7 +40,7 @@
     if (themeColorMeta) themeColorMeta.setAttribute("content", THEME_COLORS[theme]);
   };
 
-  applyTheme(root.getAttribute("data-theme") === "light" ? "light" : "dark");
+  applyTheme(root.getAttribute("data-theme") === "dark" ? "dark" : "light");
 
   if (themeToggle) {
     themeToggle.addEventListener("click", () => {
@@ -54,15 +54,8 @@
     });
   }
 
-  try {
-    const mql = window.matchMedia("(prefers-color-scheme: light)");
-    const onSchemeChange = (e) => {
-      if (readStored()) return;
-      applyTheme(e.matches ? "light" : "dark");
-    };
-    if (mql.addEventListener) mql.addEventListener("change", onSchemeChange);
-    else if (mql.addListener) mql.addListener(onSchemeChange);
-  } catch (e) { /* ignore */ }
+  // Note: we intentionally do NOT follow the OS color-scheme preference.
+  // First-visit default is always light; the user's toggle choice is respected thereafter.
 
   /* ---------------------------------------------------------
      Top bar: scrolled state + mobile menu
