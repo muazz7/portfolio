@@ -373,6 +373,11 @@ a:focus-visible, button:focus-visible {
   color: var(--accent-ink); display: block; line-height: 1; }
 .fact__label { font-family: var(--f-mono); font-size: 0.72rem; text-transform: uppercase;
   letter-spacing: 0.06em; color: var(--ink-3); margin-top: 0.4rem; display: block; }
+.about__links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; margin-top: 1.6rem;
+  padding-top: 1.4rem; border-top: 2px solid var(--rule);
+  font-family: var(--f-mono); font-size: 0.82rem; }
+.about__links a { color: var(--ink-2); transition: color 0.2s; }
+.about__links a:hover { color: var(--accent-ink); }
 
 /* ---------- Work index ---------- */
 .index { border-top: 2px solid var(--border); }
